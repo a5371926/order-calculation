@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>興中/大昌水電 - 工資試算</title>
+    <style>
+        :root { --main: #007aff; --dark: #1c1c1e; --bg: #f2f2f7; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 20px; padding-bottom: 110px; }
+        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h2 { color: var(--dark); font-size: 1.1rem; border-left: 4px solid var(--main); padding-left: 10px; margin-top: 0; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .price { color: #ff3b30; font-weight: 600; }
+        #total-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--dark); color: white; padding: 20px; text-align: center; border-radius: 20px 20px 0 0; }
+        input[type="checkbox"] { width: 22px; height: 22px; }
+        input[type="number"] { width: 50px; padding: 8px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; text-align: center; }
+        .note { color: #8e8e93; font-size: 0.8rem; text-align: center; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="note">興中店 / 大昌店 官方安裝工資試算</div>
+    <h1 style="text-align:center; font-size: 1.3rem;">🔧 水電工程預估單</h1>
+
+    <div class="card">
+        <h2>🚽 衛浴與免治</h2>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="3000"> 單體馬桶</label><span class="price">$3,000</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="2000"> 分體馬桶</label><span class="price">$2,000</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1000"> 免治馬桶蓋</label><span class="price">$1,000</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="450"> 馬桶清洗器</label><span class="price">$450</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="600"> 水箱零件維修</label><span class="price">$600</span></div>
+    </div>
+
+    <div class="card">
+        <h2>💧 龍頭與淨水</h2>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1200"> 廚房混合龍頭</label><span class="price">$1,200</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="600"> 廚房單冷水</label><span class="price">$600</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1800"> 整組 RO 更換</label><span class="price">$1,800</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="800"> RO 鵝頸龍頭</label><span class="price">$800</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="600"> 沐浴龍頭</label><span class="price">$600</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="500"> 面盆龍頭</label><span class="price">$500</span></div>
+    </div>
+
+    <div class="card">
+        <h2>🖼️ 配件與其他</h2>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1500"> 面盆更換</label><span class="price">$1,500</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="500"> 面盆修飾瓷蓋</label><span class="price">$500</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1000"> 鏡櫃組安裝</label><span class="price">$1,000</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="500"> 一般鏡子(含平台)</label><span class="price">$500</span></div>
+        <div class="item"><label>掛件數量：</label><span><input type="number" class="qty" data-p="400" value="0"> <small>$400/件</small></span></div>
+    </div>
+
+    <div class="card">
+        <h2>🔥 熱水器與排風</h2>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="2500"> 儲熱熱水器舊換新</label><span class="price">$2,500</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1500"> 瞬間熱水器舊換新</label><span class="price">$1,500</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="1000"> 暖風機安裝</label><span class="price">$1,000</span></div>
+        <div class="item"><label><input type="checkbox" class="srv" data-p="500"> 一般排風機</label><span class="price">$500</span></div>
+    </div>
+
+    <div id="total-bar">
+        預估安裝工資總計：<br>
+        <span style="font-size: 1.5rem; color: #f1c40f;">NT$ <span id="res">0</span></span>
+    </div>
+
+    <script>
+        const s = document.querySelectorAll('.srv'), q = document.querySelectorAll('.qty'), r = document.getElementById('res');
+        function calc() {
+            let t = 0;
+            s.forEach(c => { if(c.checked) t += parseInt(c.dataset.p); });
+            q.forEach(i => { t += (parseInt(i.value)||0) * parseInt(i.dataset.p); });
+            r.innerText = t.toLocaleString();
+        }
+        s.forEach(c => c.onchange = calc);
+        q.forEach(i => i.oninput = calc);
+    </script>
+</body>
+</html>
